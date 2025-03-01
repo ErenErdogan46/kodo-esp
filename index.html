@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="eo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esperanto Programado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #121212;
+            color: white;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #00bcd4;
+        }
+
+        #editor-container {
+            width: 90%;
+            margin: auto;
+            text-align: left;
+            border: 1px solid #444;
+            border-radius: 5px;
+            padding: 10px;
+            background: #1e1e1e;
+            min-height: 200px;
+            color: white;
+            font-family: monospace;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        #esperantoCode {
+            outline: none;
+            width: 100%;
+            min-height: 200px;
+            font-size: 16px;
+            font-family: monospace;
+            background: transparent;
+            border: none;
+            color: white;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #00bcd4;
+            color: white;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0097a7;
+        }
+
+        pre {
+            width: 90%;
+            min-height: 50px;
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: left;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+
+        .keyword {
+            color: #ffa500;
+            font-weight: bold;
+        }
+
+        .error {
+            text-decoration: underline;
+            text-decoration-color: red;
+            text-decoration-thickness: 2px;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Esperanto Programado - Retkompililo</h1>
+    
+    <div id="editor-container">
+        <div id="esperantoCode" contenteditable="true" spellcheck="false" oninput="highlightCode(); checkErrors();"></div>
+    </div>
+    
+    <button onclick="runEsperantoCode()">Ruli</button>
+
+    <h3>Rezulto</h3>
+    <pre id="esperantoOutput"></pre>
+
+    <footer>Farita de <span style="color:#00bcd4;">Eren Erdogan</span></footer>
+
+    <script src="compiler.js"></script>
+</body>
+</html>
