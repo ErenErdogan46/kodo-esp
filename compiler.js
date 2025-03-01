@@ -1,22 +1,18 @@
-const keywords = {
-    "estas": "ASSIGN",
-    "plus": "ADD",
-    "montru": "PRINT",
-    "dum": "WHILE",
-    "se": "IF"
-};
+const keywords = { "estas": "ASSIGN", "plus": "ADD", "montru": "PRINT", "dum": "WHILE", "se": "IF" };
 
 function lexer(code) {
     const tokens = [];
     const words = code.split(/\s+/);
-    
+
     words.forEach(word => {
-        if (!isNaN(word)) {
+        if (!isNaN(word)) {  
             tokens.push(["NUMBER", Number(word)]);
-        } else if (keywords[word]) {
+        } else if (keywords[word]) {  
             tokens.push([keywords[word], word]);
-        } else {
+        } else if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(word)) {  
             tokens.push(["IDENTIFIER", word]);
+        } else {  
+            tokens.push(["ERROR", word]);  
         }
     });
 
@@ -52,8 +48,7 @@ function interpreter(ast) {
         if (node[0] === "ASSIGN") {
             variables[node[1]] = node[2][1];
         } else if (node[0] === "PRINT") {
-            let varName = node[1][1];
-            output += (varName in variables ? variables[varName] : "Nedifinita") + "\n";
+            output += (variables[node[1][1]] || "Nedifinita") + "\n";
         }
     });
 
@@ -61,7 +56,8 @@ function interpreter(ast) {
 }
 
 function runEsperantoCode() {
-    const code = document.getElementById("esperantoCode").innerText;
+    const codeElement = document.getElementById("editor");
+    const code = codeElement.innerText || codeElement.textContent; 
     const tokens = lexer(code);
     const ast = parser(tokens);
     const output = interpreter(ast);
@@ -69,35 +65,20 @@ function runEsperantoCode() {
     document.getElementById("esperantoOutput").innerText = output;
 }
 
-
-function highlightCode() {
-    const editor = document.getElementById("esperantoCode");
+function highlightEsperantoCode() {
+    const editor = document.getElementById("editor");
     let code = editor.innerText;
-    
-    code = code.replace(/\b(estas|montru|plus|dum|se)\b/g, '<span class="keyword">$1</span>');
-    editor.innerHTML = code;
-}
+    let words = code.split(/\s+/);
 
-
-function checkErrors() {
-    const editor = document.getElementById("esperantoCode");
-    let words = editor.innerText.split(/\s+/);
-    
-    words = words.map(word => {
-        if (!keywords[word] && isNaN(word) && word !== "") {
+    let highlightedHTML = words.map(word => {
+        if (keywords[word]) {  
+            return `<span class="keyword">${word}</span>`;
+        } else if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(word)) {  
+            return word;
+        } else {  
             return `<span class="error">${word}</span>`;
         }
-        return word;
-    });
+    }).join(" ");
 
-    editor.innerHTML = words.join(" ");
+    editor.innerHTML = highlightedHTML;
 }
-
-document.addEventListener("DOMContentLoaded", function () {
-    const editor = document.getElementById("esperantoCode");
-
-    editor.addEventListener("input", function () {
-        highlightCode();
-        checkErrors();
-    });
-});
