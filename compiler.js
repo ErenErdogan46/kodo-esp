@@ -1,3 +1,8 @@
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("runButton").addEventListener("click", runEsperantoCode);
+    document.getElementById("editor").addEventListener("input", highlightEsperantoCode);
+});
+
 const keywords = { "estas": "ASSIGN", "plus": "ADD", "montru": "PRINT", "dum": "WHILE", "se": "IF" };
 
 function lexer(code) {
@@ -26,7 +31,7 @@ function parser(tokens) {
     while (i < tokens.length) {
         const [type, value] = tokens[i];
 
-        if (type === "IDENTIFIER" && i + 2 < tokens.length && tokens[i + 1][0] === "ASSIGN") {
+        if (type === "IDENTIFIER" && i + 2 < tokens.length && tokens[i + 1][0] === "ASSIGN" && tokens[i + 2]) {
             ast.push(["ASSIGN", value, tokens[i + 2]]);
             i += 3;
         } else if (type === "PRINT" && i + 1 < tokens.length) {
@@ -52,17 +57,24 @@ function interpreter(ast) {
         }
     });
 
-    return output;
+    document.getElementById("esperantoOutput").innerText = output;
 }
 
 function runEsperantoCode() {
     const codeElement = document.getElementById("editor");
-    const code = codeElement.innerText || codeElement.textContent; 
+    if (!codeElement) {
+        console.error("Editor öğesi bulunamadı!");
+        return;
+    }
+    const code = codeElement.innerText.trim();
+    if (code === "") {
+        document.getElementById("esperantoOutput").innerText = "Neniu kodo enmetita!";
+        return;
+    }
+
     const tokens = lexer(code);
     const ast = parser(tokens);
-    const output = interpreter(ast);
-
-    document.getElementById("esperantoOutput").innerText = output;
+    interpreter(ast);
 }
 
 function highlightEsperantoCode() {
