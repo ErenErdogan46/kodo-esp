@@ -26,8 +26,8 @@
             white-space: pre-wrap;
             overflow: auto;
         }
-        #editor span.keyword { color: #ffcc00; font-weight: bold; }
-        #editor span.error { text-decoration: underline red; }
+        .keyword { color: #ffcc00; font-weight: bold; }
+        .error { text-decoration: underline red; }
         #esperantoOutput {
             background: #222;
             padding: 10px;
@@ -50,12 +50,11 @@
 <body>
     <h1>Esperanto Programado - Retkompililo</h1>
     
-    <div id="editor" contenteditable="true" oninput="highlightEsperantoCode()" placeholder="Skribu vian kodon ĉi tie..."></div>
-    <button onclick="runEsperantoCode()">Ruli</button>
+    <div id="editor" contenteditable="true" placeholder="Skribu vian kodon ĉi tie..."></div>
+    <button id="runButton">Ruli</button>
     
     <pre id="esperantoOutput"></pre>
-    <footer>Farita de <span style="color:#00bcd4;">Eren Erdogan</span></footer>
 
-    <script src="compiler.js"></script>
+    <script src="compiler.js"></script> 
 </body>
 </html>
